@@ -32,6 +32,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 app.use("/auth", authRoutes);
 app.use("/protected", protectedRoutes);
+app.use("/api/tables", tableRoutes);
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
