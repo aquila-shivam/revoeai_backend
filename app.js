@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
+const tableRoutes = require("./routes/tableRoutes");  
 
 // Load environment variables
 dotenv.config();
