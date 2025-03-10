@@ -7,12 +7,44 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret";
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Add validation
+    if (!email || !password) {
+      return res.status(400).json({ 
+        error: "Email and password are required" 
+      });
+    }
+
+    // Check if user already exists by email
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ 
+        error: "User with this email already exists" 
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ 
+      email, 
+      password: hashedPassword
+    });
+
     await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+    
+    res.status(201).json({ 
+      message: "User registered successfully",
+      user: {
+        id: newUser._id,
+        email: newUser.email
+      }
+    });
+
   } catch (error) {
-    res.status(500).json({ error: "Error registering user" });
+    console.error("Registration error:", error);
+    res.status(500).json({ 
+      error: "Error registering user",
+      details: error.message 
+    });
   }
 };
 
